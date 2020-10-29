@@ -187,6 +187,23 @@ Escena1::Escena1()
 // los objetos que se indican en los guiones de las práctica 2
 // .......
 
+Escena2::Escena2()
+{
+   using namespace std ;
+   cout << "Creando objetos de escena 2 .... " << flush ;
+
+
+   objetos.push_back( new MallaPLY("../recursos/plys/beethoven.ply") );
+   objetos.push_back( new MallaPLY("../recursos/plys/big_dodge.ply") );
+   objetos.push_back( new MallaRevolPLY("../recursos/plys/peon.ply", 20) );
+   objetos.push_back( new Cilindro(9, 10) );
+   objetos.push_back( new Cono(11, 10) );
+   objetos.push_back( new Esfera(11, 10) );
+
+
+
+   cout << "hecho." << endl << flush ;
+}
 
 
 // -------------------------------------------------------------------------
