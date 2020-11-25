@@ -83,6 +83,29 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
    // COMPLETAR: práctica 3: recorrer las entradas y visualizar cada nodo.
    // ........
 
+   // Guardo ModelView
+   cv.cauce_act->pushMM();
+
+   // guardo color anterior
+   const Tupla4f color_previo = leerFijarColVertsCauce( cv );
+
+   for (unsigned int i = 0; i < entradas.size(); ++i){
+      if (entradas[i].tipo == TipoEntNGE::objeto)
+         entradas[i].objeto->visualizarGL(cv); // Visualizar objeto
+      else if (entradas[i].tipo == TipoEntNGE::transformacion)
+         cv.cauce_act->compMM( *(entradas[i].matriz) ); // Compongo matriz
+      else
+         cout << "Error" << endl;
+      
+   }
+
+   // restauro color anterior
+   glColor4fv( color_previo );
+
+   // Saco ModelVIew
+   cv.cauce_act->popMM();
+
+
    // COMPLETAR: práctica 4: en la práctica 4, si 'cv.iluminacion' es 'true',
    // se deben de gestionar los materiales:
    //   1. guardar puntero al material activo al inicio (está en cv.material_act)
@@ -119,7 +142,9 @@ unsigned NodoGrafoEscena::agregar( const EntradaNGE & entrada )
 {
    // COMPLETAR: práctica 3: agregar la entrada al nodo, devolver índice de la entrada agregada
    // ........
-   return 0 ; // sustituir por lo que corresponda ....
+   entradas.push_back(entrada);
+   return (entradas.size()-1) ;
+
 
 }
 // -----------------------------------------------------------------------------
@@ -151,7 +176,12 @@ Matriz4f * NodoGrafoEscena::leerPtrMatriz( unsigned indice )
    // COMPLETAR: práctica 3: devolver puntero la matriz en ese índice
    //   (debe de dar error y abortar si no hay una matriz en esa entrada)
    // ........(sustituir 'return nullptr' por lo que corresponda)
-   return nullptr ;
+   
+   assert (indice < entradas.size());
+   assert (entradas[indice].tipo == TipoEntNGE::transformacion);
+   assert (entradas[indice].matriz != nullptr);
+   
+   return entradas[indice].matriz ;
 
 
 }
