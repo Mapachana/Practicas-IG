@@ -13,7 +13,7 @@
 
 // Añadido por mi
 #include "modelo-jer.h"
-
+#include "grafo-escena.h"
 
 
 
@@ -196,6 +196,7 @@ Escena2::Escena2()
    cout << "Creando objetos de escena 2 .... " << flush ;
 
 
+   objetos.push_back( new ExtrellaY(3));
    objetos.push_back( new MallaPLY("../recursos/plys/beethoven.ply") );
    objetos.push_back( new MallaPLY("../recursos/plys/big_dodge.ply") );
    objetos.push_back( new MallaRevolPLY("../recursos/plys/peon.ply", 20) );
@@ -220,6 +221,7 @@ Escena3::Escena3()
    using namespace std ;
    cout << "Creando objetos de escena 3 .... " << flush ;
 
+   objetos.push_back(new GrafoEstrellaY(3));
    objetos.push_back(new CNodoRaiz());
 
    cout << "hecho." << endl << flush ;

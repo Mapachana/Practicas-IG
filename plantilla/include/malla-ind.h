@@ -64,6 +64,18 @@ class MallaInd : public Objeto3D
 
 
 } ;
+
+
+
+class ExtrellaY : public MallaInd{
+   public:
+      ExtrellaY( unsigned int n);
+};
+
+class PiramideExtrellaY : public MallaInd{
+   public:
+      PiramideExtrellaY(unsigned int n);
+};
 // ---------------------------------------------------------------------
 // Clase para mallas obtenidas de un archivo 'ply'
 // es un tipo de malla indexada que define un nuevo constructor

@@ -100,6 +100,21 @@ class NodoGrafoEscena : public Objeto3D
 
 } ;
 
+class GrafoEstrellaY : public NodoGrafoEscena{
+   Matriz4f * rotacion = nullptr;
+
+   public:
+      void actualizarEstadoParametro( const unsigned iParam, const float t_sec );
+      unsigned leerNumParametros() const;
+      void fijar_rotacion(const float nuevarotacion);
+      GrafoEstrellaY(unsigned int n);
+};
+
+class ExtrellaYModelo : public NodoGrafoEscena{
+   public:
+      ExtrellaYModelo(unsigned int n);
+};
+
 #endif // GRAFO_ESCENA_HPP
 
 // *********************************************************************

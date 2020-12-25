@@ -10,7 +10,6 @@ class CNodoRaiz : public NodoGrafoEscena{
      protected:
         Matriz4f * trasl_salto = nullptr;
         Matriz4f * trasl_nariz = nullptr;
-        //Matriz4f * trasl_brazo2 = nullptr;
         Matriz4f * rotacion = nullptr;
 
         void actualizarEstadoParametro( const unsigned iParam, const float t_sec );

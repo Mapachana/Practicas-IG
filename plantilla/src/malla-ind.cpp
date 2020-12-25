@@ -132,6 +132,85 @@ void MallaInd::visualizarGL( ContextoVis & cv )
 
 
 
+ExtrellaY::ExtrellaY(unsigned int n){
+   Tupla3f centro = {0.5, 0.0, 0.5};
+   float radio_ext = 0.5;
+   float radio_int = 0.1;
+   // Arreglo que no se veia bien la estrella por la distancia, pero no hago ningun cambio mas
+
+   // Añado vertices, primero el centro y luego los cemas rotandolos el angulo necesario y alernando corta y alrga distancia
+   vertices.push_back(centro);
+
+   for(int i = 0; i < 2*n; ++i){
+      Tupla3f punto = {cos(2.0*i*M_PI/(2*n)), 0.0, sin(2.0*i*M_PI/(2*n))};
+      //float angulo = 360.0/(2*n);
+      if ( i%2 == 0)
+         //vertices.push_back(centro + MAT_Rotacion(angulo, 0.0, 1.0, 0.0) * Tupla3f(0, 1, 0));
+         vertices.push_back(centro + radio_ext*punto);
+      else
+         //vertices.push_back(centro + MAT_Rotacion(angulo, 0.0, 1.0, 0.0) * Tupla3f(0, 1, 0));
+         vertices.push_back(centro + radio_int*punto);    
+   }
+
+   // Asigno color blanco al centro y colores de sus coordenadas al resto
+   col_ver.push_back({1.0, 1.0, 1.0});
+
+   float R,G,B;
+	for(unsigned i = 0; i<vertices.size(); i++){
+		R = vertices[i](X);
+		G = vertices[i](Y);
+		B = vertices[i](Z);
+		col_ver.push_back({R,G,B});
+	}
+
+   // Añado triangulos
+
+   for (int i = 0; i < 2*n-1; ++i){
+      triangulos.push_back({0, i, i+1});
+   }
+
+   triangulos.push_back({0, 2*n-1, 1});
+}
+
+
+PiramideExtrellaY::PiramideExtrellaY(unsigned int n){
+    Tupla3f centro = {0.5, 0.0, 0.5};
+   float radio_ext = 0.5;
+   float radio_int = 0.25;
+
+   for(int i = 0; i < 4*n; ++i){
+      Tupla3f punto = {cos(2.0*i*M_PI/(2*n)), 0.0, sin(2.0*i*M_PI/(2*n))};
+      //float angulo = 360.0/(2*n);
+      if ( i%2 == 0)
+         //vertices.push_back(centro + MAT_Rotacion(angulo, 0.0, 1.0, 0.0) * Tupla3f(0, 1, 0));
+         vertices.push_back(centro + radio_ext*punto);
+      else
+         //vertices.push_back(centro + MAT_Rotacion(angulo, 0.0, 1.0, 0.0) * Tupla3f(0, 1, 0));
+         vertices.push_back(centro + radio_int*punto);    
+   }
+
+   // Asigno color blanco al centro y colores de sus coordenadas al resto
+   col_ver.push_back({1.0, 1.0, 1.0});
+
+   float R,G,B;
+	for(unsigned i = 0; i<vertices.size(); i++){
+		R = vertices[i](X);
+		G = vertices[i](Y);
+		B = vertices[i](Z);
+		col_ver.push_back({R,G,B});
+	}
+
+   // Añado triangulos
+
+   for (int i = 0; i < 2*n-1; ++i){
+      triangulos.push_back({0, i, i+1});
+   }
+
+   triangulos.push_back({0, 2*n-1, 1});
+}
+/* 360/2n ---- x                        
+180---------pi*/
+
 
 
 // *****************************************************************************
@@ -213,30 +292,6 @@ Tetraedro::Tetraedro()
          {0,2,3},
          {1,2,3}
       } ;
-
-   /*vertices =
-      {  { -1.0, -1.0, -1.0 }, // 0
-         { -1.0, -1.0, +1.0 }, // 1
-         { -1.0, +1.0, -1.0 }, // 2
-         { -1.0, +1.0, +1.0 }, // 3
-         { +1.0, -1.0, -1.0 }, // 4
-         { +1.0, -1.0, +1.0 }, // 5
-         { +1.0, +1.0, -1.0 }, // 6
-         { +1.0, +1.0, +1.0 }, // 7
-      } ;
-
-
-
-   triangulos =
-      {  {0,1,3}, {0,3,2}, // X-
-         {4,7,5}, {4,6,7}, // X+ (+4)
-
-         {0,5,1}, {0,4,5}, // Y-
-         {2,3,7}, {2,7,6}, // Y+ (+2)
-
-         {0,6,4}, {0,2,6}, // Z-
-         {1,5,7}, {1,7,3}  // Z+ (+1)
-      } ;*/
 
 }
 // -----------------------------------------------------------------------------------------------

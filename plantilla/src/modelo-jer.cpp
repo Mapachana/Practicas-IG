@@ -24,7 +24,7 @@ void CNodoRaiz::actualizarEstadoParametro( const unsigned iParam, const float t_
             fijar_rotacion(50.0 * t_sec);
             break;
         case 2:
-            fijar_traslnariz(3.0 * (1 + sin(t_sec))/2.0);
+            fijar_traslnariz(2.0 * (1 + sin(t_sec))/2.0);
     }
 }
 

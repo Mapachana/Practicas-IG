@@ -22,6 +22,10 @@
 #include "matrices-tr.h"
 #include "grafo-escena.h"
 
+// EXAMEN añado malla
+#include "malla-ind.h"
+#include "malla-revol.h"
+
 using namespace std ;
 
 // *********************************************************************
@@ -230,3 +234,51 @@ bool NodoGrafoEscena::buscarObjeto
    // ni este nodo ni ningún hijo es el buscado: terminar
    return false ;
 }
+
+
+unsigned GrafoEstrellaY::leerNumParametros() const{
+    return 1; // Hay un grado de libertad
+}
+
+void GrafoEstrellaY::actualizarEstadoParametro( const unsigned iParam, const float t_sec ){
+    assert(iParam < leerNumParametros()); 
+
+    switch(iParam){
+        case 0:
+            fijar_rotacion(300.0 * t_sec);
+    }
+}
+
+void GrafoEstrellaY::fijar_rotacion(const float nuevarotacion){
+    *rotacion = MAT_Rotacion(nuevarotacion, 0.0, 1.0, 0.0);
+}
+
+
+ExtrellaYModelo::ExtrellaYModelo(unsigned int n){
+   agregar(MAT_Traslacion(-1.25, 0.0, -1.25)); // pongo el centro en 0
+   agregar(MAT_Escalado(2.4, 2.4, 2.4)); // antes habia radio 0.5, ahora hay 1.2 (1.2/0.5=2.4)
+   agregar(new ExtrellaY(n));
+}
+
+GrafoEstrellaY::GrafoEstrellaY(unsigned int n){
+   unsigned ind = agregar( MAT_Rotacion(0.0, 0.0, 1.0, 0.0)); // Inicializo movimiento de rotacion
+   
+   agregar(new ExtrellaYModelo(n)); // Asumo que funciona, aunque ya se que no es asi del todo
+
+
+   agregar(MAT_Traslacion(1.2, 0.0, 1.2));
+   agregar(MAT_Escalado(0.13, 0.14, 1.0)); // Especifcico radio cono 0.13 y altura 0.14
+   agregar(MAT_Rotacion(90.0, 1.0, 0.0, 0.0)); // Tumbo el cono
+   //agregar(MAT_Rotacion(90.0, 0.0, 0.0, 0.0)); // Tumbo el cono
+   for (int i = 0; i < n; ++i){
+      agregar(new Cono(30, 30));
+      agregar(MAT_Rotacion(360.0/n, 0.0, 1.0, 0.0)); // Roto para poner un cono en cada punta de la estrella
+   }
+
+   rotacion = leerPtrMatriz(ind); // Movimiento de rotacion
+
+}
+
+
+
+
