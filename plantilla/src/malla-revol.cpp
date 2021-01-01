@@ -26,16 +26,81 @@ void MallaRevol::inicializar
    const unsigned               num_copias  // número de copias del perfil
 )
 {
+
+   // Cálculo de normales
+   vector<Tupla3f> normales_aris;
+   Tupla3f normal, aux;
+
+   for(unsigned int i = 0; i < perfil.size()-1; ++i){
+      aux = perfil[i+1] - perfil[i];
+
+      normal(0) = aux(1);
+      normal(1) = -aux(0);
+      normal(2) = 0.0;
+
+      if(normal.lengthSq() > 0)
+         normales_aris.push_back(normal.normalized());
+      else
+         normales_aris.push_back({0.0, 0.0, 0.0});
+   }
+
+    for (unsigned int i = 0; i < perfil.size(); ++i){
+      nor_ver.push_back({0.0, 0.0, 0.0});
+   }
+
+   if (normales_aris[0].lengthSq() > 0)
+      nor_ver[0] = normales_aris[0].normalized();
+   else
+      nor_ver[0] = {0.0, 0.0, 0.0};
+
+   for(unsigned int i = 1; i < perfil.size()-1; ++i){
+      nor_ver[i] = normales_aris[i] + normales_aris[i-1];
+
+      if (nor_ver[i].lengthSq() > 0) // Normalizo si no es 0
+         nor_ver[i] = nor_ver[i].normalized();
+   }
+
+   if (normales_aris[perfil.size()-2].lengthSq() > 0)
+      nor_ver[perfil.size()-1] = normales_aris[perfil.size()-2].normalized();
+   else
+      nor_ver[perfil.size()-1] = {0.0, 0.0, 0.0};
+
+   // Calcular coordenadas de textura
+   std::vector<float> d, t;
+   float den = 0;
+
+   for(unsigned int i = 0; i < perfil.size()-1; ++i){
+      d.push_back(sqrt((perfil[i+1]-perfil[i]).lengthSq()));
+      den += d[i];
+   }
+   t.push_back(0);
+   for(unsigned int i = 1; i < perfil.size(); ++i)
+      t.push_back(t[i-1]+d[i-1]/den);
+
+
+
    // COMPLETAR: Práctica 2: completar: creación de la malla....
 
-   Tupla3f q;
+   Tupla3f q, r;
    int k;
    int m = perfil.size();
+   float t_x, t_y;
+   Tupla2f textura;
 
    for (unsigned int i = 0; i < num_copias; ++i){
       for(unsigned int j = 0; j < m; ++j){
-         q = MAT_Rotacion((360.0*i)/(num_copias-1), 0.0, 1.0, 0.0) * perfil[j];
-         vertices.push_back(q);
+         //q = MAT_Rotacion((360.0*i)/(num_copias-1), 0.0, 1.0, 0.0) * perfil[j]; // perfil
+         //r = MAT_Rotacion((360.0*i)/(num_copias-1), 0.0, 1.0, 0.0) * nor_ver[j]; // normal
+         vertices.push_back( MAT_Rotacion((360.0*i)/(num_copias-1), 0.0, 1.0, 0.0) * perfil[j]);
+         if (i != 0)
+            nor_ver.push_back(MAT_Rotacion((360.0*i)/(num_copias-1), 0.0, 1.0, 0.0) * nor_ver[j]);
+
+         t_x = (float)i/(num_copias-1); // textura
+         t_y = 1.0 - t[j];
+         textura = {t_x, t_y};
+         cc_tt_ver.push_back(textura);
+
+         
       }
    }
 

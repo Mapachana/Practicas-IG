@@ -49,6 +49,22 @@ void MallaInd::calcularNormalesTriangulos()
    // COMPLETAR: Práctica 4: creación de la tabla de normales de triángulos
    // ....
 
+   Tupla3f ver1, ver2, ver3, aux1, aux2, normal;
+   for(unsigned int i = 0; i<triangulos.size(); i++){
+      ver1 = vertices[triangulos[i](0)];
+      ver2 = vertices[triangulos[i](1)];
+      ver3 = vertices[triangulos[i](2)];
+
+      aux1 = ver2-ver1;
+      aux2 = ver3-ver1;
+
+      normal = aux1.cross(aux2);
+      if(normal.lengthSq() > 0)
+         nor_tri.push_back(normal.normalized());
+      else
+         nor_tri.push_back({0.0, 0.0, 0.0});  
+   }
+
 }
 
 
@@ -61,6 +77,26 @@ void MallaInd::calcularNormales()
    // se debe invocar en primer lugar 'calcularNormalesTriangulos'
    // .......
 
+   // Calculamos las normales de cada triangulo
+   calcularNormalesTriangulos();
+
+   // Inicializamos vector
+   for (unsigned int i = 0; i < vertices.size(); ++i){
+      nor_ver.push_back({0.0, 0.0, 0.0});
+   }
+
+   // A cada vertice de un triangulo le sumamos la normal de dicho triangulo. No hace falta dividir porque se normaliza
+   for (unsigned int i = 0; i < triangulos.size(); ++i){
+      nor_ver[triangulos[i](0)] = nor_ver[triangulos[i](0)] + nor_tri[i];
+      nor_ver[triangulos[i](1)] = nor_ver[triangulos[i](1)] + nor_tri[i];
+      nor_ver[triangulos[i](2)] = nor_ver[triangulos[i](2)] + nor_tri[i];
+   }
+
+   // Guardamos la normal normalizada de cada verice si no es nula
+   for (unsigned int i = 0; i < vertices.size(); ++i){
+      if (nor_ver[i].lengthSq() > 0)
+         nor_ver[i] = nor_ver[i].normalized();
+   }
 
 }
 
@@ -100,7 +136,7 @@ void MallaInd::visualizarGL( ContextoVis & cv )
    if (col_ver.size() != 0)
       array_verts->fijarColores(GL_FLOAT, 3, col_ver.data());
    if (cc_tt_ver.size() != 0)
-      array_verts->fijarCoordText(GL_FLOAT, 3, cc_tt_ver.data());
+      array_verts->fijarCoordText(GL_FLOAT, 2, cc_tt_ver.data());
    if (nor_ver.size() != 0)
       array_verts->fijarNormales(GL_FLOAT, nor_ver.data());
 
@@ -151,6 +187,7 @@ MallaPLY::MallaPLY( const std::string & nombre_arch )
 
    // COMPLETAR: práctica 4: invocar  a 'calcularNormales' para el cálculo de normales
    // .................
+   calcularNormales();
 
 
 
@@ -187,6 +224,7 @@ Cubo::Cubo()
          {1,5,7}, {1,7,3}  // Z+ (+1)
       } ;
 
+   calcularNormales();
 }
 // -----------------------------------------------------------------------------------------------
 
@@ -214,29 +252,7 @@ Tetraedro::Tetraedro()
          {1,2,3}
       } ;
 
-   /*vertices =
-      {  { -1.0, -1.0, -1.0 }, // 0
-         { -1.0, -1.0, +1.0 }, // 1
-         { -1.0, +1.0, -1.0 }, // 2
-         { -1.0, +1.0, +1.0 }, // 3
-         { +1.0, -1.0, -1.0 }, // 4
-         { +1.0, -1.0, +1.0 }, // 5
-         { +1.0, +1.0, -1.0 }, // 6
-         { +1.0, +1.0, +1.0 }, // 7
-      } ;
-
-
-
-   triangulos =
-      {  {0,1,3}, {0,3,2}, // X-
-         {4,7,5}, {4,6,7}, // X+ (+4)
-
-         {0,5,1}, {0,4,5}, // Y-
-         {2,3,7}, {2,7,6}, // Y+ (+2)
-
-         {0,6,4}, {0,2,6}, // Z-
-         {1,5,7}, {1,7,3}  // Z+ (+1)
-      } ;*/
+   calcularNormales();
 
 }
 // -----------------------------------------------------------------------------------------------
@@ -280,6 +296,68 @@ CuboColores::CuboColores()
 		col_ver.push_back({R,G,B});
 	}
 
+   calcularNormales();
+
 }
 // -----------------------------------------------------------------------------------------------
+
+Cubo24 :: Cubo24(){
+   vertices = {
+      {-1.0,-1.0,-1.0}, {-1.0,-1.0,1.0},
+      {1.0,-1.0,-1.0}, {1.0,-1.0,1.0},
+      
+      {-1.0,1.0,-1.0}, {-1.0,1.0,1.0},
+      {1.0,1.0,-1.0}, {1.0,1.0,1.0},
+
+      {-1.0,1.0,1.0},{1.0,1.0,1.0},
+      {-1.0,-1.0,1.0},{1.0,-1.0,1.0},
+
+      {-1.0,1.0,-1.0},{1.0,1.0,-1.0},
+      {-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
+
+      {-1.0,1.0,-1.0},{-1.0,1.0,1.0},        
+      {-1.0,-1.0,-1.0},{-1.0,-1.0,1.0},
+
+      {1.0,1.0,-1.0},{1.0,1.0,1.0},
+      {1.0,-1.0,-1.0},{1.0,-1.0,1.0} 
+   };
+
+   triangulos = {
+      {0,2,1},{3,1,2},
+      {4,5,6},{7,6,5},
+      {9,8,10},{9,10,11},
+      {13,14,12},{13,15,14},
+      {17,16,18},{17,18,19},
+      {21,20,22},{21,23,22}
+
+   };
+
+   cc_tt_ver = {
+      {0.0, 1.0},{0.0, 0.0},
+      {1.0,1.0},{1.0,0.0},
+      {0.0, 0.0},{0.0, 1.0},
+      {1.0,0.0},{1.0,1.0},
+      {0.0,0.0},{1.0,0.0},
+      {0.0,1.0},{1.0,1.0},
+      {1.0,0.0},{0.0,0.0},
+      {1.0,1.0},{0.0,1.0},
+      {0.0,0.0},{1.0,0.0},
+      {0.0,1.0},{1.0,1.0},
+      {1.0,0.0},{0.0,0.0},
+      {1.0,1.0},{0.0,1.0},
+   };
+
+   calcularNormales();
+}
+
+NodoCubo :: NodoCubo(){
+   ponerNombre("Cubo 24 vertices");
+   
+   Textura * tex = new Textura("../recursos/imgs/window-icon.jpg");
+   
+   agregar( new Material(tex, 0.2, 0.4, 0.4, 20) );
+   agregar(new Cubo24());
+
+
+}
 

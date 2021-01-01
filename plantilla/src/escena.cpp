@@ -1,5 +1,4 @@
 
-
 #include "ig-aux.h"
 #include "escena.h"
 
@@ -13,6 +12,7 @@
 
 // Añadido por mi
 #include "modelo-jer.h"
+#include "latapeones.h"
 
 
 
@@ -23,6 +23,8 @@ Escena::Escena()
 {
    // COMPLETAR: Práctica 4: inicializar 'col_fuentes' y 'material_ini'
    // ...
+   col_fuentes = new Col2Fuentes();
+   material_ini = new Material(0.2, 0.2, 0.3, 60);
 
 
    // COMPLETAR: Práctica 5: hacer 'push_back' de varias camaras perspectiva u ortogonales,
@@ -83,6 +85,14 @@ void Escena::visualizarGL( ContextoVis & cv )
       // * activar la colección de fuentes de la escena
       // * activar el material inicial
       // ....
+
+      cauce->fijarEvalMIL(true);
+      col_fuentes->activar(*cauce);
+
+      if (material_ini != nullptr){
+         cv.material_act = material_ini;
+         material_ini->activar(*cauce);
+      }
 
    }
    else // si la iluminación no está activada, deshabilitar MIL y texturas
@@ -232,6 +242,18 @@ Escena3::Escena3()
 // Añadir la implementación del constructor de la clase Escena4 para construir
 // los objetos que se indican en los guiones de las práctica 4
 // .......
+
+Escena4::Escena4()
+{
+   using namespace std ;
+   cout << "Creando objetos de escena 4 .... " << flush ;
+
+   objetos.push_back(new NodoCubo());
+   objetos.push_back(new LataPeones());
+   objetos.push_back(new VariasLatasPeones());
+
+   cout << "hecho." << endl << flush ;
+}
 
 
 

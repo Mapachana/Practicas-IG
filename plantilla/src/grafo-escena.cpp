@@ -89,11 +89,22 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
    // guardo color anterior
    const Tupla4f color_previo = leerFijarColVertsCauce( cv );
 
+   // guardo material anterior
+   Material * material_previo = nullptr;
+
+   if (cv.iluminacion == true)
+      material_previo = cv.material_act;
+
+
    for (unsigned int i = 0; i < entradas.size(); ++i){
       if (entradas[i].tipo == TipoEntNGE::objeto)
          entradas[i].objeto->visualizarGL(cv); // Visualizar objeto
       else if (entradas[i].tipo == TipoEntNGE::transformacion)
          cv.cauce_act->compMM( *(entradas[i].matriz) ); // Compongo matriz
+      else if (entradas[i].tipo == TipoEntNGE::material){
+         cv.material_act = entradas[i].material;
+         cv.material_act->activar(*cv.cauce_act);
+      }
       else
          cout << "Error" << endl;
       
@@ -101,6 +112,12 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
 
    // restauro color anterior
    glColor4fv( color_previo );
+
+   // Restauro materiaul anterior
+   if (material_previo != nullptr){
+      cv.material_act = material_previo;
+      cv.material_act->activar(*cv.cauce_act);
+   }
 
    // Saco ModelVIew
    cv.cauce_act->popMM();
@@ -111,6 +128,9 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
    //   1. guardar puntero al material activo al inicio (está en cv.material_act)
    //   2. si una entrada des de tipo material, activarlo y actualizar 'cv.material_act'
    //   3. al finalizar, restaurar el material activo al inicio (si es distinto del actual)
+
+
+   // Hecho arriba!!!
 
 
 

@@ -13,6 +13,9 @@
 #include "objeto3d.h"   // declaración de 'Objeto3D'
 #include "array-verts.h" // clase 'ArrayVert'
 
+
+#include "grafo-escena.h"
+
 // ---------------------------------------------------------------------
 // clase para objetos gráficos genéricos
 
@@ -105,6 +108,12 @@ class CuboColores : public MallaInd
 {
    public:
       CuboColores();
+};
+
+class NodoCubo : public NodoGrafoEscena
+{
+   public:
+      NodoCubo();
 };
 
 
