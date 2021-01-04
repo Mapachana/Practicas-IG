@@ -102,8 +102,10 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
       else if (entradas[i].tipo == TipoEntNGE::transformacion)
          cv.cauce_act->compMM( *(entradas[i].matriz) ); // Compongo matriz
       else if (entradas[i].tipo == TipoEntNGE::material){
-         cv.material_act = entradas[i].material;
-         cv.material_act->activar(*cv.cauce_act);
+         if (cv.iluminacion && !cv.modo_seleccion){
+            cv.material_act = entradas[i].material;
+            cv.material_act->activar(*cv.cauce_act);
+         }
       }
       else
          cout << "Error" << endl;
@@ -217,6 +219,27 @@ void NodoGrafoEscena::calcularCentroOC()
    //   (si el centro ya ha sido calculado, no volver a hacerlo)
    // ........
 
+   if (!centro_calculado){
+      Matriz4f matriz = MAT_Ident();
+      Tupla3f suma = {0.0, 0.0, 0.0};
+      float num_centros = 0.0;
+
+      for (unsigned int i = 0; i < entradas.size(); ++i){
+         if (entradas[i].tipo == TipoEntNGE::objeto){
+            entradas[i].objeto->calcularCentroOC();
+            suma = suma + (matriz * entradas[i].objeto->leerCentroOC());
+            num_centros++;
+         }
+         else if ( entradas[i].tipo == TipoEntNGE::transformacion)
+            matriz = matriz * (*entradas[i].matriz);
+      }
+
+      Tupla3f centro = suma/num_centros;
+
+      ponerCentroOC(centro);
+      centro_calculado = true;
+   }
+
 }
 // -----------------------------------------------------------------------------
 // método para buscar un objeto con un identificador y devolver un puntero al mismo
@@ -237,14 +260,37 @@ bool NodoGrafoEscena::buscarObjeto
    // 1. calcula el centro del objeto, (solo la primera vez)
    // ........
 
+   calcularCentroOC();
+
 
    // 2. si el identificador del nodo es el que se busca, ya está (terminar)
    // ........
+
+   if(leerIdentificador() == ident_busc){
+      centro_wc = mmodelado * leerCentroOC();
+      if (objeto == nullptr)
+        cout << "\t Identificador encontrado con puntero asociado nulo" << endl;
+
+      *objeto = this;
+
+      return true;
+   }
 
 
    // 3. El nodo no es el buscado: buscar recursivamente en los hijos
    //    (si alguna llamada para un sub-árbol lo encuentra, terminar y devolver 'true')
    // ........
+
+   Matriz4f matriz = mmodelado;
+
+   for (unsigned int i = 0; i < entradas.size(); ++i) {
+      if ( entradas[i].tipo == TipoEntNGE::objeto){
+         if(entradas[i].objeto->buscarObjeto(ident_busc, matriz, objeto, centro_wc))
+            return true;
+      }
+      else if (entradas[i].tipo == TipoEntNGE::transformacion)
+         matriz = matriz * (*entradas[i].matriz);
+   }
 
 
    // ni este nodo ni ningún hijo es el buscado: terminar

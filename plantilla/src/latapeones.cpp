@@ -7,6 +7,7 @@
 
 SuperiorLata::SuperiorLata(){
     ponerNombre("Lata: Tapa superior");
+    ponerIdentificador(-1);
 
     agregar(new Material(0.2, 0.2, 0.3, 15));
     agregar(new MallaRevolPLY("../recursos/plys/lata-psup.ply", 40));
@@ -14,6 +15,7 @@ SuperiorLata::SuperiorLata(){
 
 CuerpoLata::CuerpoLata(const std::string & tex){
     ponerNombre("Lata: Cuerpo");
+    ponerIdentificador(-1);
 
     Textura * textura = new Textura(tex);
 
@@ -23,6 +25,7 @@ CuerpoLata::CuerpoLata(const std::string & tex){
 
 InferiorLata::InferiorLata(){
     ponerNombre("Lata: Tapa inferior");
+    ponerIdentificador(-1);
 
     agregar(new Material(0.2, 0.2, 0.3, 15));
     agregar(new MallaRevolPLY("../recursos/plys/lata-pinf.ply", 40));
@@ -30,6 +33,7 @@ InferiorLata::InferiorLata(){
 
 Lata::Lata(const std::string & textura){
     ponerNombre("Lata");
+    ponerIdentificador(-1);
 
     agregar(MAT_Escalado(2.0,2.0,2.0));
     agregar(new InferiorLata() );
@@ -39,24 +43,28 @@ Lata::Lata(const std::string & textura){
 
 LataCocaCola::LataCocaCola(){
     ponerNombre("Lata Coca Cola");
+    ponerIdentificador(1);
 
     agregar(new Lata("../recursos/imgs/lata-coke.jpg"));
 }
 
 LataPepsi::LataPepsi(){
     ponerNombre("Lata Pepsi");
+    ponerIdentificador(2);
 
     agregar(new Lata("../recursos/imgs/lata-pepsi.jpg"));
 }
 
 LataUGR::LataUGR(){
     ponerNombre("Lata UGR");
+    ponerIdentificador(3);
 
     agregar(new Lata("../recursos/imgs/window-icon.jpg"));
 }
 
 PeonMadera::PeonMadera(){
     ponerNombre("Peon Madera");
+    ponerIdentificador(4);
 
      Textura * textura = new Textura("../recursos/imgs/text-madera.jpg");
 
@@ -66,6 +74,7 @@ PeonMadera::PeonMadera(){
 
 PeonBlanco::PeonBlanco(){
     ponerNombre("Peon Blanco");
+    ponerIdentificador(5);
 
     ponerColor({1.0, 1.0, 1.0});
 
@@ -75,6 +84,7 @@ PeonBlanco::PeonBlanco(){
 
 PeonNegro::PeonNegro(){
     ponerNombre("Peon Negro");
+    ponerIdentificador(6);
 
     ponerColor({0.0, 0.0, 0.0});
 

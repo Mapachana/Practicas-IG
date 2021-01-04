@@ -51,6 +51,8 @@ void CNodoRaiz::fijar_rotacion(const float nuevarotacion){
 
 CilindroParametrico::CilindroParametrico( const int num_verts_per, const unsigned nperfiles, const float radio, const float altura  )
 {
+    ponerIdentificador(-1);
+
     agregar( MAT_Escalado( radio, altura, radio ) );
     agregar( new Cilindro(num_verts_per, nperfiles) );
 }
@@ -59,6 +61,8 @@ CilindroParametrico::CilindroParametrico( const int num_verts_per, const unsigne
 // EsferaParametrica
 
 EsferaParametrica::EsferaParametrica(const int num_verts_per, const unsigned nperfiles, const float radio){
+    ponerIdentificador(-1);
+
     agregar( MAT_Escalado( radio, radio, radio ) );
     agregar( new Esfera(num_verts_per, nperfiles) );
 }
@@ -66,6 +70,8 @@ EsferaParametrica::EsferaParametrica(const int num_verts_per, const unsigned npe
 //---------------------------------------------------------------------
 // ConoParametrico
 ConoParametrico::ConoParametrico(const int num_verts_per, const unsigned nperfiles, const float radio, const float altura){
+    ponerIdentificador(-1);
+
     agregar( MAT_Escalado( radio, altura, radio ) );
     agregar( new Cono(num_verts_per, nperfiles) );
 }
@@ -74,6 +80,8 @@ ConoParametrico::ConoParametrico(const int num_verts_per, const unsigned nperfil
 // Clases varias
 
 Boton::Boton(){
+    ponerIdentificador(-1);
+
     agregar(MAT_Rotacion(90.0, 1.0, 0.0, 0.0));
     agregar(MAT_Rotacion(90.0, 0.0, 1.0, 0.0));
     agregar(new CilindroParametrico(30, 30, 0.2, 0.2));
@@ -82,6 +90,8 @@ Boton::Boton(){
 }
 
 Botones::Botones(){
+    ponerIdentificador(-1);
+
     agregar(MAT_Traslacion(0.0, 0.0, 1.35));
     agregar(new Boton());
     agregar(MAT_Traslacion(0.0, 0.5, -0.1));
@@ -90,6 +100,8 @@ Botones::Botones(){
 }
 
 Brazo::Brazo(){
+    ponerIdentificador(-1);
+
     agregar(MAT_Rotacion(70.0, 0.0, 0.0, 1.0));
     agregar( new CilindroParametrico(15, 30, 0.1, 2.5));
 
@@ -97,6 +109,8 @@ Brazo::Brazo(){
 }
 
 DosBrazos::DosBrazos(){
+    ponerIdentificador(-1);
+
     agregar(MAT_Traslacion(0.0, 0.5, 0.0));
     agregar(new Brazo());
     agregar(MAT_Rotacion(180.0, 0.0, 1.0, 0.0));
@@ -105,18 +119,25 @@ DosBrazos::DosBrazos(){
 }
 
 Cuerpo::Cuerpo(){
+    ponerIdentificador(10);
+    ponerNombre("Cuerpo");
+
     agregar( new EsferaParametrica(30, 30, 1.5) );
     agregar( new DosBrazos());
     agregar( new Botones());
 }
 
 Ojo::Ojo(){
+    ponerIdentificador(-1);
+    
     agregar(new EsferaParametrica(30, 30, 0.12));
 
     ponerColor({0.0, 0.0, 0.0});
 }
 
 DosOjos::DosOjos(){
+    ponerIdentificador(-1);
+
     agregar(MAT_Traslacion(-0.3,0.0,1.0));
     agregar(new Ojo());
     agregar(MAT_Traslacion(0.6,0.0,0.0));
@@ -125,6 +146,8 @@ DosOjos::DosOjos(){
 }
 
 Nariz::Nariz(Matriz4f * & traslacion){
+    ponerIdentificador(-1);
+
     unsigned ind = agregar(MAT_Traslacion(0.0, 0.0, 0.0));
 
     agregar(MAT_Traslacion(0.0, -0.2, 0.9));
@@ -137,24 +160,33 @@ Nariz::Nariz(Matriz4f * & traslacion){
 }
 
 Copa::Copa(){
+    ponerIdentificador(-1);
+
     agregar(new CilindroParametrico(30, 30, 0.7, 1.5));
 
     ponerColor({0.0, 0.0, 0.0});
 }
 
 Ala::Ala(){
+    ponerIdentificador(-1);
+
     agregar(new CilindroParametrico(30, 30, 1.5, 0.2));
 
     ponerColor({0.0, 0.0, 0.0});
 }
 
 Cinta::Cinta(){
+    ponerIdentificador(-1);
+    
     agregar(new CilindroParametrico(30, 30, 0.8, 0.2));
 
     ponerColor({1.0, 0.0, 0.0});
 }
 
 Sombrero::Sombrero(){
+    ponerIdentificador(11);
+    ponerNombre("Sombrero");
+
     agregar(new Copa());
     agregar(new Ala());
     agregar(MAT_Traslacion(0.0, 0.2, 0.0));
@@ -162,6 +194,9 @@ Sombrero::Sombrero(){
 }
 
 Cabeza::Cabeza(Matriz4f * & traslacion){
+    ponerIdentificador(12);
+    ponerNombre("Cabeza");
+
     agregar( new EsferaParametrica(30, 30, 1.0) );
     agregar(new DosOjos());
     agregar(new Nariz(traslacion));
