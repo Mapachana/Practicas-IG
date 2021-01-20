@@ -9,6 +9,7 @@
 
 CNodoRaiz::CNodoRaiz(){
 	ponerNombre("Snowy");
+    ponerIdentificador(-1);
 
     agregar( new Final(trasl_salto, rotacion, trasl_nariz));
 }
@@ -203,6 +204,8 @@ Cabeza::Cabeza(Matriz4f * & traslacion){
 }
 
 Final::Final( Matriz4f* &traslacion_salto, Matriz4f * & rotaciontotal, Matriz4f * & traslacion_nariz ){
+    ponerIdentificador(-1);
+    
     unsigned ind = agregar( MAT_Traslacion(0.0, 0.0, 0.0) );
     unsigned ind2 = agregar( MAT_Rotacion(0.0, 0.0, 1.0, 0.0));
 

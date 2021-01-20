@@ -328,7 +328,7 @@ void Camara3Modos::desplRotarXY( const float da, const float db )
          org_polares = org_polares + Tupla3f({da/factor, db/factor, 0.0});
 
          Tupla3f nuevas_cartesianas = Cartesianas(org_polares);
-         punto_atencion  = punto_atencion + (nuevas_cartesianas - org_cartesianas);
+         punto_atencion  = punto_atencion - (nuevas_cartesianas - org_cartesianas);
          org_cartesianas = nuevas_cartesianas;
 
          actualizarEjesMCV();
@@ -344,7 +344,7 @@ void Camara3Modos::desplRotarXY( const float da, const float db )
          // .....
          // (nota: los ejes no cambian)
 
-         punto_atencion = punto_atencion - (float)(da/5.0) * eje[0] + (float)(db/5.0) * eje[1];
+         punto_atencion = punto_atencion + (float)(da/5.0) * eje[0] + (float)(db/5.0) * eje[1];
 
          break ;
       }

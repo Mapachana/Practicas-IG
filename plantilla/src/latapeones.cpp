@@ -93,6 +93,7 @@ PeonNegro::PeonNegro(){
 }
 
 Peones::Peones(){
+    ponerIdentificador(-1);
     agregar(new PeonMadera());
     agregar(MAT_Traslacion(3.0, 0.0, 0.0));
     agregar(new PeonBlanco());
@@ -101,12 +102,14 @@ Peones::Peones(){
 }
 
 LataPeones::LataPeones(){
+    ponerIdentificador(-1);
     agregar(new LataCocaCola());
     agregar(MAT_Traslacion(0.0, 1.5, 3.0));
     agregar(new Peones());
 }
 
 Latas::Latas(){
+    ponerIdentificador(-1);
     agregar(new LataCocaCola());
     agregar(MAT_Traslacion(3.0, 0.0, 0.0));
     agregar(new LataPepsi());
@@ -115,6 +118,7 @@ Latas::Latas(){
 }
 
 VariasLatasPeones::VariasLatasPeones(){
+    ponerIdentificador(-1);
     agregar(new Latas());
     agregar(MAT_Traslacion(0.0, 1.5, 3.0));
     agregar(new Peones());

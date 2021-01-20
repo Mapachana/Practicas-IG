@@ -115,7 +115,7 @@ void NodoGrafoEscena::visualizarGL( ContextoVis & cv )
    // restauro color anterior
    glColor4fv( color_previo );
 
-   // Restauro materiaul anterior
+   // Restauro material anterior
    if (material_previo != nullptr){
       cv.material_act = material_previo;
       cv.material_act->activar(*cv.cauce_act);
